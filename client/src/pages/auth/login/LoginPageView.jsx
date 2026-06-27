@@ -17,7 +17,7 @@ const LoginPageView = (props) => {
   } = loginPageState;
 
   const { email, password } = formData;
-  const{isLoggingIn} = useAuthStore();
+  const { isLoggingIn } = useAuthStore();
 
   return (
     <div className="flex justify-center items-center md:py-12 bg-[#F8FAFC]">
@@ -33,6 +33,11 @@ const LoginPageView = (props) => {
 
         {/* FORM */}
         <form onSubmit={handleSubmit} className="flex flex-col">
+          {errors.auth && (
+            <div className="pb-4 bg-red-50 border border-red-500 rounded-lg px-4 py-2">
+              <p className="text-red-500 text-xs">{errors.auth}</p> 
+            </div>
+          )}
 
           {/* EMAIL FEILD */}
           <div className="flex flex-col gap-2 group pb-4">
@@ -66,7 +71,7 @@ const LoginPageView = (props) => {
                 onChange={handleInputChange}
                 value={password}
               />
-              <button className="absolute right-4 cursor-pointer"
+              <button type="button" className="absolute right-4 cursor-pointer"
                 onClick={handleShowPassword}>
                 {isShowPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
@@ -79,6 +84,7 @@ const LoginPageView = (props) => {
             <button
               type="submit"
               className="w-full flex justify-center items-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled={isLoggingIn}
             >
               {isLoggingIn ?
                 <Loader className="size-5 animate-spin" /> :

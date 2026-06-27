@@ -91,7 +91,24 @@ const SignUpPage = () => {
     }
 
     if (success === true) {
-      await signup(newFormData);
+      setsignUpPageState((prevState) => ({
+        ...prevState,
+        errors: {},
+      }));
+
+      try {
+        await signup(newFormData);
+      } catch (error) {
+        const message = error?.response?.data?.message || "Signup failed";
+
+        setsignUpPageState((prevState) => ({
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            auth: message,
+          },
+        }));
+      }
     }
   };
 

@@ -25,9 +25,10 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
-
+      return true;
     } catch (error) {
       console.error(error?.response?.data?.message);
+      return false;
     } finally {
       set({
         isSigningUp: false,
@@ -38,13 +39,13 @@ export const useAuthStore = create((set) => ({
   login: async (data) => {
     set({ isLoggingIn: true });
 
-    console.log("data", data)
-
     try {
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUser: res.data });
+      return true;
     } catch (error) {
       console.error(error?.response?.data?.message);
+      return false;
     } finally {
       set({ isLoggingIn: false });
     }

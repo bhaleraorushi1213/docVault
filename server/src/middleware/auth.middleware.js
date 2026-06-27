@@ -11,9 +11,16 @@ export const protectRoute = async (req, res, next) => {
       return res.status(401).json({message: "Unauthorized - No Token Provided"});
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET); // this is the secret key that we will use to verify the token using our private key
+    let decoded;
 
-    if(!decoded) {
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET); // this is the secret key that we will use to verify the token using our private key
+    } catch (error) {
+      console.log("Error in protectRoute middleware", error.message);
+      return res.status(401).json({ message: "Unauthorized - Invalid or expired token" });
+    }
+
+    if(!decoded?.userId) {
       return res.status(401).json({message: "Unauthorized - Invalid Token"})
     }
 

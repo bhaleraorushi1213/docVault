@@ -55,13 +55,28 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    const {email, password} = loginPageState.formData
+    const { email, password } = loginPageState.formData;
     e.preventDefault();
 
     const success = validateForm();
 
     if (success === true) {
-      await login({email, password});
+      setLoginPageState((prevState) => ({
+        ...prevState,
+        errors: {},
+      }));
+
+      const loginSuccess = await login({ email, password });
+
+      if (!loginSuccess) {
+        setLoginPageState((prevState) => ({
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            auth: "Invalid email or password",
+          },
+        }));
+      }
     }
   };
 

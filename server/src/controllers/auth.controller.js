@@ -26,7 +26,6 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);  // this will generate a salt means random letters to add to password to make it un decryptable
     const hashedPassword = await bcrypt.hash(password, salt);  // here we hashed our password with salt
 
-
     // creating new user with hashed password 
     const newUser = new User({
       email,
@@ -35,8 +34,8 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
-      generateToken(newUser._id, res); // generating token and sending it to user
       await newUser.save(); // saved newUser in database
+      generateToken(newUser._id, res); // generating token and sending it to user
 
       // sending success response with users details to frontend
       return res.status(201).json({
@@ -81,7 +80,7 @@ export const login = async (req, res) => {
 
     res.status(200).json({
       _id: user._id,
-      fullName: user.fullName,
+      name: user.name,
       email: user.email,
       profilePicture: user?.profilePicture || "",
     })
@@ -93,11 +92,16 @@ export const login = async (req, res) => {
 }
 
 //@description     logout the user
-//@route           POST /api/users/logout
+//@route           POST /api/auth/logout
 //@access          Public
 export const logout = (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 })
+    res.cookie("jwt", "", {
+      maxAge: 0,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
     res.status(200).json({ message: "Logged out successfully" })
   } catch (error) {
     console.log("Error in logout controller", error.message);

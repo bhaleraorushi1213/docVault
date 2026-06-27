@@ -87,7 +87,7 @@ const SignUpPageView = (props) => {
                 onChange={handleInputChange}
                 value={password}
               />
-              <button className="absolute right-4 cursor-pointer"
+              <button type="button" className="absolute right-4 cursor-pointer"
                 onClick={() => handleShowPassword("password")}>
                 {isShowPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
@@ -110,7 +110,7 @@ const SignUpPageView = (props) => {
                 value={confirmPassword}
               />
 
-              <button className="absolute right-4 cursor-pointer" onClick={() => handleShowPassword("confirm")}>
+              <button type="button" className="absolute right-4 cursor-pointer" onClick={() => handleShowPassword("confirm")}>
                 {isShowConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
             </div>
@@ -125,12 +125,14 @@ const SignUpPageView = (props) => {
             </p>
           </div>
 
+          {errors.auth && <p className="text-red-500 text-xs pb-4">{errors.auth}</p>}
+
           {/* SUBMIT BUTTON */}
           <div className="py-4">
             <button
               type="submit"
               className="w-full flex justify-center items-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              disabled={!isChecked}
+              disabled={!isChecked || isSigningUp}
             >
               {isSigningUp ?
                 <Loader className="size-5 animate-spin" /> :
